@@ -1,0 +1,15 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/wmake/scripts/AllwmakeParseArguments
+
+#------------------------------------------------------------------------------
+
+# Interpolation libraries (required by the spring libraries below)
+wmake $targetType interExtrapolateSplineXY
+wmake $targetType interExtrapolationTable
+
+# Non-linear spring libraries
+wmake $targetType nonLinearSpring
+wmake $targetType nonLinearAxialAngularSpring
+
+#------------------------------------------------------------------------------

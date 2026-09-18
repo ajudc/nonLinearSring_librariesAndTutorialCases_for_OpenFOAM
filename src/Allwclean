@@ -1,0 +1,17 @@
+#!/bin/sh
+cd "${0%/*}" || exit                                # Run from this directory
+
+#------------------------------------------------------------------------------
+
+wclean libso interExtrapolateSplineXY
+wclean libso interExtrapolationTable
+wclean libso nonLinearSpring
+wclean libso nonLinearAxialAngularSpring
+
+# Remove the installed libraries
+rm -f "${FOAM_USER_LIBBIN:?}"/libinterExtrapolateSplineXY* \
+      "${FOAM_USER_LIBBIN:?}"/libinterExtrapolationTable* \
+      "${FOAM_USER_LIBBIN:?}"/libnonLinearSpring* \
+      "${FOAM_USER_LIBBIN:?}"/libnonLinearAxialAngularSpring*
+
+#------------------------------------------------------------------------------
