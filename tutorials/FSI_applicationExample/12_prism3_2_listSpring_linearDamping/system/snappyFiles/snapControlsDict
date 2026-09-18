@@ -1,0 +1,50 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      meshQualityDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+//- Number of patch smoothing iterations before finding correspondence
+//  to surface
+nSmoothPatch 3;
+
+//- Relative distance for points to be attracted by surface feature point
+//  or edge. True distance is this factor times local
+//  maximum edge length.
+tolerance 2.0;
+//tolerance 2.0;
+
+//- Number of mesh displacement relaxation iterations.
+nSolveIter 100;
+
+//- Maximum number of snapping relaxation iterations. Should stop
+//  before upon reaching a correct mesh.
+nRelaxIter 10;
+
+// Feature snapping
+
+    //- Number of feature edge snapping iterations.
+    //  Leave out altogether to disable.
+    nFeatureSnapIter 10;
+
+    //- Detect (geometric only) features by sampling the surface
+    //  (default=false).
+    implicitFeatureSnap false;
+
+    //- Use castellatedMeshControls::features (default = true)
+    explicitFeatureSnap true;
+
+    //- Detect points on multiple surfaces (only for explicitFeatureSnap)
+    multiRegionFeatureSnap false;
+
+// ************************************************************************* //

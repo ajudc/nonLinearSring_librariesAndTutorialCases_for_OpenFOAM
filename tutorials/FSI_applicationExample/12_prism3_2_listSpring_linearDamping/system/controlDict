@@ -1,0 +1,77 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \    /   O peration     | Version:  v2212                                 |
+|   \  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     pimpleFoam;
+
+startFrom       latestTime;
+
+startTime       0;
+
+stopAt          endTime;
+
+endTime         260;
+
+deltaT          8e-4;//1e-9;
+
+writeControl    timeStep;//adjustableRunTime;
+
+writeInterval   250;//0.005;
+
+purgeWrite      3;
+
+writeFormat     ascii;
+
+writePrecision  9;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   12;
+
+runTimeModifiable true;
+
+adjustTimeStep  no;
+
+//maxCo           1.0000;
+
+libs
+(
+    "libOpenFOAM.so"
+    "libforces.so"
+    "libfieldFunctionObjects.so"
+    "libinterExtrapolateSplineXY.so"
+    "libinterExtrapolationTable.so"
+    "libnonLinearSpring.so"
+);
+
+functions
+{
+    
+    #include "forceCoeffs"
+
+    //for recording movements
+    sixDoFRigidBodyState
+    {
+        type sixDoFRigidBodyState;
+        libs (sixDoFRigidBodyState);
+        angleFormat degrees;
+    };
+
+}
+
+// ************************************************************************* //

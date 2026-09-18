@@ -1,0 +1,76 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+  =========                 |
+  \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox
+   \\    /   O peration     | Website:  https://openfoam.org
+    \\  /    A nd           | Version:  9
+     \\/     M anipulation  |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      meshQualityDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+
+
+prism.stl
+{
+    type triSurfaceMesh;
+    name prism_surf;
+
+    regions
+    {
+        prism                // Named region in the STL file
+        {
+            name prism ;     // User-defined patch name
+        }                       // otherwise given name_secondSolid
+    }
+}
+
+level01 
+{ 
+    type searchableBox;
+    min (-4.2   -4.2 -1.0); 
+    max ( 11.76  4.2  3.0); 
+}
+
+level02 
+{ 
+    type searchableBox;
+    min (-1.89  -1.89 -1.0); 
+    max ( 7.2    1.89  3.0); 
+}
+
+level03 
+{ 
+    type searchableBox;
+    min (-1.365 -1.365 -1.0); 
+    max ( 4.095  1.365  3.0); 
+}
+
+level04 
+{ 
+    type searchableBox;
+    min (-0.945 -0.945 -1.0); 
+    max ( 0.945  0.945  3.0); 
+}
+
+level05 
+{ 
+    type searchableBox;
+    min (-0.525 -0.42 -1.0); 
+    max ( 0.525  0.42  3.0); 
+}
+
+surfRef
+{ 
+    type searchableBox;
+    min (-0.315 -0.21 -1.0); 
+    max ( 0.315  0.21  3.0); 
+}
+
+
+// ************************************************************************* //
