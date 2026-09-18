@@ -1,0 +1,21 @@
+#!/bin/sh
+
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+#Mesh generation
+runApplication blockMesh
+runApplication snappyHexMesh -overwrite
+runApplication extrudeMesh
+runApplication createPatch -overwrite
+
+#Initial conditions
+restore0Dir
+
+#decompose the openfoam case
+runApplication decomposePar
+
+#run the case
+runParallel $(getApplication)
+
