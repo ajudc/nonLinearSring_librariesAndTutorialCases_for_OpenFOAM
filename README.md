@@ -4,7 +4,7 @@
 
 These directories and files are related to the following article:
 
-Poorya Poozesh, Antonio J. Álvarez, Arturo N. Fontán, and Félix Nieto, *Implementation and validation of nonlinear spring-damper restraints in OpenFOAM's six-DOF rigid-body motion framework*, OpenFOAM Journal, 2026.
+Poorya Poozesh, Antonio J. Álvarez, Arturo N. Fontán, and Félix Nieto, *Implementation and verification of nonlinear spring-damper restraints in OpenFOAM's six-DOF rigid-body motion framework*, OpenFOAM Journal, 2026.
 
 ## Copyright and licensing
 
@@ -48,41 +48,32 @@ Tabulated stiffness and damping data can use linear or cubic-spline interpolatio
 
 ## Repository layout
 
-- `Libraries/`: restraint and interpolation/extrapolation source code, plus `Allwmake` and `Allclean`.
-- `Tutorials/Translational/freeDecay/`: cases 01-04.
-- `Tutorials/Translational/wind/`: cases 05-07.
-- `Tutorials/Rotational/freeDecay/`: cases 08-10.
-- `Tutorials/Rotational/wind/`: case 11.
-- `Tutorials/FieldsForMapping/`: steady fields mapped by the wind-excited wing cases to reduce the initial flow transient.
-- `FSI_applicationExample/`: case 12, the 3:2 rectangular-prism application.
+- `src/`: restraint and interpolation/extrapolation source code, plus `Allwmake` and `Allwclean`.
+- `tutorials/Translational/freeDecay/`: cases 01-04.
+- `tutorials/Translational/wind/`: cases 05-07.
+- `tutorials/Rotational/freeDecay/`: cases 08-10.
+- `tutorials/Rotational/wind/`: case 11.
+- `tutorials/FieldsForMapping/`: steady fields mapped by the wind-excited wing cases to reduce the initial flow transient.
+- `tutorials/FSI_applicationExample/`: case 12, the 3:2 rectangular-prism application.
 
 ## Compile the libraries
 
 From a shell in which OpenFOAM ESI is loaded:
 
 ```sh
-cd Libraries
+cd src
 ./Allwmake
 ```
 
 The compiled libraries are written to `$FOAM_USER_LIBBIN`. To remove the installed libraries and generated `lnInclude` directories, keep OpenFOAM loaded and run:
 
 ```sh
-./Allclean
-```
-
-Before creating a distribution archive, also remove the platform-specific `Make/<platform>` directories and their object/dependency files by running `wclean libso` in every library directory:
-
-```sh
-for library in interExtrapolateSplineXY interExtrapolationTable nonLinearSpring nonLinearAxialAngularSpring
-do
-    (cd "$library" && wclean libso)
-done
+./Allwclean
 ```
 
 ## Run and post-process a case
 
-Each case contains an `Allrun` script that generates the mesh, prepares the initial fields, decomposes the domain, and runs the configured solver in parallel. Wind-excited wing cases also map the initial solution from `Tutorials/FieldsForMapping`.
+Each case contains an `Allrun` script that generates the mesh, prepares the initial fields, decomposes the domain, and runs the configured solver in parallel. Wind-excited wing cases also map the initial solution from `tutorials/FieldsForMapping`.
 
 From the selected case directory:
 
@@ -107,7 +98,7 @@ For free-decay cases, these files contain the displacement or rotation time hist
 
 ## Case-to-manuscript mapping
 
-The mapping below refers to the manuscript titled *Implementation and validation of nonlinear spring-damper restraints in OpenFOAM's six-DOF rigid-body motion framework*. A case reproduces the OpenFOAM-library contribution to the cited result. Comparative preCICE, standard-`linearSpring`, analytical, and central-finite-difference datasets are not included in this archive unless stated otherwise.
+The mapping below refers to the manuscript titled *Implementation and verification of nonlinear spring-damper restraints in OpenFOAM's six-DOF rigid-body motion framework*. A case reproduces the OpenFOAM-library contribution to the cited result. Comparative preCICE, standard-`linearSpring`, analytical, and central-finite-difference datasets are not included in this archive unless stated otherwise.
 
 ### Free-decay and verification cases
 
@@ -145,26 +136,9 @@ The archive provides one default `deltaT` per case. The manuscript figures and t
 
 Cases 04 and 10 use `1.0e-6 s` for the Section 4.3 numerical-verification comparison. The application-case values shown in the mapping table are the defaults supplied in the archive.
 
-## Final validation and archive cleanup
-
-Before distributing the repository, build the libraries and run the required tutorial checks in a clean OpenFOAM v2406 environment. Use the same OpenFOAM environment for compilation and execution, and confirm that the custom restraint libraries are found in `$FOAM_USER_LIBBIN` and loaded by the tutorial `controlDict` files.
-
-After verification, run `./Allclean` in every tutorial or application case that was executed. This removes generated processor directories, reconstructed initial fields, meshes, post-processing results, logs, and plots. Preserve the original `0.org` directories. The supplied `Tutorials/FieldsForMapping/0` and `Tutorials/FieldsForMapping/constant/polyMesh` directories are intentional input data used by the wind-excited cases and must also be preserved.
-
-Run the library cleanup described above, and then check the release tree for remaining compilation or execution products:
-
-```sh
-find Libraries -type d \( -name 'linux*' -o -name lnInclude \) -print
-find Libraries -type f \( -name '*.o' -o -name '*.dep' -o -name '*.so' \) -print
-find Tutorials FSI_applicationExample -type d \( -name 'processor*' -o -name postProcessing \) -print
-find Tutorials FSI_applicationExample -type f \( -name 'log*' -o -name 'image.pdf' -o -name 'image.png' \) -print
-```
-
-These commands should produce no output. Remove any reported generated files or directories before packaging the archive. Also remove reconstructed numerical time directories and generated `constant/polyMesh` directories from ordinary case folders, while retaining the `FieldsForMapping` input data identified above.
-
 ## FSI application resource note
 
-`FSI_applicationExample/12_prism3_2_listSpring_linearDamping` is substantially more expensive than the wing tutorials. Its `Allrun` script uses the number of subdomains set in `system/decomposeParDict` (eight in the supplied archive), but a publication-quality production run may require more cores and several days. Adjust the decomposition to the available hardware and record the OpenFOAM version, core count, time step, end time, and any dictionary changes with the reproduced results.
+`tutorials/FSI_applicationExample/12_prism3_2_listSpring_linearDamping` is substantially more expensive than the wing tutorials. Its `Allrun` script uses the number of subdomains set in `system/decomposeParDict` (eight in the supplied archive), but a publication-quality production run may require more cores and several days. Adjust the decomposition to the available hardware and record the OpenFOAM version, core count, time step, end time, and any dictionary changes with the reproduced results.
 
 ## Disclaimer
 
