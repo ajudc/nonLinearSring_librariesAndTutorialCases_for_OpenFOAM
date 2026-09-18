@@ -1,0 +1,27 @@
+#!/bin/sh
+
+cd "${0%/*}" || exit                                # Run from this directory
+. ${WM_PROJECT_DIR:?}/bin/tools/RunFunctions        # Tutorial run functions
+#------------------------------------------------------------------------------
+
+#Mesh generation
+runApplication blockMesh
+runApplication snappyHexMesh -overwrite
+runApplication extrudeMesh
+runApplication createPatch -overwrite
+
+#Initial conditions
+restore0Dir
+
+#Map fields for initial condicitona
+runApplication mapFields ../../../FieldsForMapping -consistent
+
+#Copy the pointDisplacement files
+cp 0.orig/pointDisplacement 0
+
+#decompose the openfoam case
+runApplication decomposePar
+
+#run the case
+runParallel $(getApplication)
+

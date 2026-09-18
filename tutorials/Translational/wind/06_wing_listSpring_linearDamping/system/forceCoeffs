@@ -1,0 +1,53 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2212                                |
+|   \\  /    A nd           | Web:      www.OpenFOAM.org                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+forcesWing
+{
+    type                forces;
+    libs                ("libforces.so");
+    writeControl        timeStep;
+    writeInterval       4;
+
+    patches             ( "wing" );
+    pName               p;
+    UName               U;
+    rho                 rhoInf;
+    rhoInf              1.225;	//air density (kg/m3)
+    log                 true;
+
+    CofR                ( 0.25 0.007 0.125 );
+     
+}
+
+forceCoeffsWing
+{
+    type                forceCoeffs;
+    libs                ("libforces.so");
+    writeControl        timeStep;
+    writeInterval       4;
+
+    patches             ( "wing" );
+    pName               p;
+    UName               U;
+    rho                 rhoInf;
+    rhoInf              1.225;
+    log                 true;
+
+    liftDir             (0 1 0);
+    dragDir             (1 0 0);
+    CofR                ( 0.25 0.007 0.125 );
+    pitchAxis           (0 0 1);
+
+    magUInf             100.0;
+    lRef                1.0; //prism height (H)
+    Aref                0.05; //Sw(spanwise dimension)*H
+}
+
+
+// ************************************************************************* //
